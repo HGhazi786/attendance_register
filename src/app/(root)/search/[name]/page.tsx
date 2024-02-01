@@ -20,7 +20,7 @@ export default async function Page({ params }: { params: { name: string } }) {
   }
   const data = searchByName(res, params.name);
   return (
-    <div className="flex justify-center items-center">
+    <div className="flex justify-center items-center p-20">
       <div className="h-[60vh] sm:w-[580px] md:w-full xs:w-[380px] w-[300px] xl:w-full lg:w-full scroll-smooth overflow-y-auto overflow-x-auto mx-2 mt-5 mb-14 xl:mb-0 lg:mb-0 rounded-3xl shadow-xl">
         <table className="text-sm text-left rtl:text-right text-gray-100 w-full">
           <thead className="text-xs uppercase bg-slate-950 text-gray-100 rounded-xl">

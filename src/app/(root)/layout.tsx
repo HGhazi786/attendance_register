@@ -29,7 +29,7 @@ export default function RootLayout({
             <main className="flex flex-col justify-center items-center">
               {children}
               <Toaster
-                toastOptions={{ style: { background: "#0f172a" } }}
+                toastOptions={{ style: { background: "#0f172a", color:"#ffff" } }}
                 position="top-center"
                 reverseOrder={false}
               />

@@ -9,8 +9,11 @@ interface filter {
 }
 
 export default async function CurrTable(props: filter) {
-const data = await getTodayInsights()
-console.log(data)
+  // const res = await fetch(`${process.env.API_BASE_URL}/api/current/`, {
+  //   method: "GET",
+  //   cache: "no-store",
+  // });
+  const data = await getTodayInsights();
   // Initialize counters
   let clCount = 0;
   let plCount = 0;
@@ -18,7 +21,6 @@ console.log(data)
   let pCount = 0;
   
   // Loop through the array
-  // @ts-ignore
   for (const entry of data) {
     switch (entry.attendance_type) {
       case "cl":
@@ -38,7 +40,6 @@ console.log(data)
   }
 
   const leave = clCount + plCount + slCount;
-  // @ts-ignore
   const absent = data.length - leave - pCount 
   
   return (
@@ -65,7 +66,6 @@ console.log(data)
           </thead>
           <tbody className="glassmorphism">
             {
-              // @ts-ignore
               data?.map((item: any) => (
                 <tr
                   key={item.service_no}

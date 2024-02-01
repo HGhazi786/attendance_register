@@ -5,8 +5,13 @@ export const sidebarLinks = [
     label: "Dashboard",
   },
   {
-    imgURL: "/register.svg",
+    imgURL: "/add.svg",
     route: "/attendance",
     label: "Attendance",
+  },
+  {
+    imgURL: "/register.svg",
+    route: "/report",
+    label: "Report",
   },
 ];

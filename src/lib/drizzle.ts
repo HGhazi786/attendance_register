@@ -21,9 +21,6 @@ export const employees = pgTable("employees", {
   email: varchar("email", { length: 100 }),
   designation: varchar("designation", { length: 50 }),
   category: varchar("category", { length: 20 }),
-  casual_leave: integer("casual_leave"),
-  privileged_leave: integer("privileged_leave"),
-  sick_leave: integer("sick_leave"),
 });
 
 export const attendance_records = pgTable("attendance_records", {

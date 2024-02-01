@@ -10,7 +10,10 @@ interface filter{
 }
 
 export default async function EmployeeTable(props:filter) {
-  const data = await getEmployees()
+  // const res = await fetch(`${process.env.API_BASE_URL}/api/employee/`, {
+  //   method: "GET",
+  //   cache: "no-store",
+  // });
   // if(props.fltr=="oldest")
   // {
   //   const res =await getOldestUser()
@@ -24,6 +27,7 @@ export default async function EmployeeTable(props:filter) {
   //   const res = await getUser();
   //   data = res
   // }
+const data = await getEmployees()
 return (
   <table className="text-sm text-left rtl:text-right text-gray-100 w-full">
     <thead className="text-xs uppercase bg-slate-950 text-gray-100 rounded-xl">
@@ -46,7 +50,8 @@ return (
       </tr>
     </thead>
     <tbody className="glassmorphism">
-      {// @ts-ignore
+      {
+  
         data?.map((item: any) => (
           <tr
             key={item.id}

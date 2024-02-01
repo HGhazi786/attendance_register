@@ -1,7 +1,22 @@
-"use server"
 import { db, attendance_records,employees } from "@/lib/drizzle";
 import { eq, sql, and } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+
+interface emptype{
+  id:number,
+  service_no: number,
+  name: string,
+  email: string,
+  category: string,
+  designation: string,
+}
+
+interface curtype {
+  service_no: number;
+  name: string;
+  designation: string;
+  attendance_type: string;
+}
 
 // User Action
 export async function getUserInsights(id:number) {
@@ -20,10 +35,20 @@ export async function getUserInsights(id:number) {
         .select({ sickLeaves: sql`COUNT(*)` })
         .from(attendance_records)
         .where(and(eq(attendance_records.employee_id,id),eq(attendance_records.attendance_type, "sl")));
+    const cpl = await db
+      .select({ compulsatoryLeaves: sql`COUNT(*)` })
+      .from(attendance_records)
+      .where(
+        and(
+          eq(attendance_records.employee_id, id),
+          eq(attendance_records.attendance_type, "cpl")
+        )
+      );
     const Items = {
         cl: Number(cl[0].casualLeaves),
         pl: Number(pl[0].privilegedLeaves),
         sl: Number(sl[0].sickLeaves),
+        cpl:Number(cpl[0].compulsatoryLeaves)
     };
     revalidatePath("/");
     return Items;
@@ -54,7 +79,7 @@ export async function getSpecAttendance(id: number){
     }
 };
 
-export async function getEmployees(){
+export async function getEmployees():Promise<emptype[]>{
     try {
       const res = await db
         .select()
@@ -71,13 +96,11 @@ export async function getEmployees(){
       return Items;
     } catch (error) {
       console.log(error);
-      return ({
-        Message: (error as { message: string }).message,
-      });
+      return ([]);
     }
 };
 
-export async function getTodayInsights(){
+export async function getTodayInsights():Promise<curtype[]>{
   const currentDate = new Date();
   const conDate = currentDate.toLocaleDateString().replace(/\//g, "-");
   try {
@@ -92,19 +115,72 @@ export async function getTodayInsights(){
       .fullJoin(employees, eq(employees.id, attendance_records.employee_id))
       .where(eq(attendance_records.date, String(conDate)));
      const Items = res.map((item: any) => ({
-      service_no: item.service_no,
-      name: item.name,
-      email: item.email,
-      designation:item.designation,
-      attendance_type: item.attendance_type,
-
+      service_no: Number(item.service_no),
+      name: String(item.name),
+      designation:String(item.designation),
+      attendance_type: String(item.attendance_type),
      }));
     revalidatePath("/");
     return Items;
   } catch (error) {
     console.log(error);
+    return[{
+      service_no: 0,
+      name:'',
+      designation: '',
+      attendance_type: '',
+    }];
+  }
+}
+
+export async function getSpecEmplyee(id:number) {
+  try {
+    // const mid = Number(params.id);
+    const res = await db.select().from(employees).where(eq(employees.id, id));
+    return res;
+  } catch (error) {
+    console.log(error);
     return ({
       Message: (error as { message: string }).message,
     });
+  }
+
+}
+
+export async function getAllRecords(id:number){
+  try {
+    const records = await getUserInsights(id);
+    const user = await getSpecEmplyee(id);
+    // Merge the two objects into a single object
+    // @ts-ignore
+    const mergedItem = { ...records, ...user[0] };
+
+    // Wrap the result in an array
+    const result = mergedItem;
+    return result;
+  } catch (error) {
+    console.log(error);
+    return {
+      Message: (error as { message: string }).message,
+    };
+  }
+}
+
+export async function getID(){
+  try {
+    // const mid = Number(params.id);
+    const res = await db.select({id:employees.id}).from(employees);
+    const responses = [];
+
+  for (const { id } of res) {
+      const response = await getAllRecords(id);
+      responses.push(response);
+  }
+    return responses;
+  } catch (error) {
+    console.log(error);
+    return {
+      Message: (error as { message: string }).message,
+    };
   }
 }
