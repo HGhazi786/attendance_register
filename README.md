@@ -3,20 +3,15 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 ## Getting Started
 
 ### Install PostgreSQL
-
 1. Install PostgreSQL on your device. You can download it from the [official PostgreSQL website](https://www.postgresql.org/download/).
 
 ### Create Database and Tables
-
 2. Open a terminal and run the following commands to create the `attendance_record` database and tables:
 
 # Create the database
 ```bash
 createdb -U your_username -W your_password attendance_record
 ```
-# Connect to the database
-psql -U your_username -W your_password -d attendance_record
-
 # Run the following queries to create tables
 ```sql
 -- Table: employees
@@ -38,8 +33,9 @@ CREATE TABLE attendance_records (
     date DATE
 );
 ```
-
-### Copy Environment Variables
+# Connect to the database
+psql -U your_username -W your_password -d attendance_record
+Copy Environment Variables
 ```
 PGSQL_HOST= "127.0.0.1"
 PGSQL_PORT= "5432"
