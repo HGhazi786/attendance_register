@@ -2,6 +2,54 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
+### Install PostgreSQL
+
+1. Install PostgreSQL on your device. You can download it from the [official PostgreSQL website](https://www.postgresql.org/download/).
+
+### Create Database and Tables
+
+2. Open a terminal and run the following commands to create the `attendance_record` database and tables:
+
+# Create the database
+```bash
+createdb -U your_username -W your_password attendance_record
+```
+# Connect to the database
+psql -U your_username -W your_password -d attendance_record
+
+# Run the following queries to create tables
+```sql
+-- Table: employees
+CREATE TABLE employees (
+    id SERIAL PRIMARY KEY,
+    service_no INTEGER,
+    name VARCHAR(100),
+    email VARCHAR(100),
+    designation VARCHAR(50),
+    category VARCHAR(20)
+);
+
+-- Table: attendance_records
+CREATE TABLE attendance_records (
+    id SERIAL PRIMARY KEY,
+    attendance_type VARCHAR(10) NOT NULL,
+    reason TEXT,
+    employee_id INTEGER REFERENCES employees(id),
+    date DATE
+);
+```
+
+### Copy Environment Variables
+```
+PGSQL_HOST= "127.0.0.1"
+PGSQL_PORT= "5432"
+PGSQL_DATABASE= "attendance-register||your_database_name"
+PGSQL_USER= "your_username||by_default_it_is_postgres"
+PGSQL_PASSWORD= "your_password"
+JWT_SECRET="your_jwt"
+API_BASE_URL="http://localhost:3000"
+```
+
 First, run the development server:
 
 ```bash
@@ -13,6 +61,31 @@ pnpm dev
 # or
 bun dev
 ```
+
+Then build your app with:
+
+```bash
+npm run build
+# or
+yarn build
+# or
+pnpm build
+# or
+bun build
+```
+
+For local server:
+
+```bash
+npm run start
+# or
+yarn start
+# or
+pnpm start
+# or
+bun start
+```
+
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
